@@ -23,10 +23,10 @@ class _LocationScreenState extends State<LocationScreen> {
     changeUI(widget.locationweather);
   }
 
-  void changeUI(Future<dynamic> weatherInfo) async {
-    final weatherdata = await weatherInfo;
+  void changeUI(weatherInfo) async {
+    //final weatherdata = await weatherInfo;
     setState(() {
-      if (weatherdata == null) {
+      if (weatherInfo == null) {
         temp = 0;
         city = '';
         weatherIcon = "error";
@@ -35,12 +35,12 @@ class _LocationScreenState extends State<LocationScreen> {
       }
 
       // String description = weatherdata['weather'][0]['description'];
-      int condition = weatherdata['weather'][0]['id'];
-      double temperature = weatherdata['main']['temp'];
+      int condition = weatherInfo['weather'][0]['id'];
+      double temperature = weatherInfo['main']['temp'].toDouble();
       temp = temperature.toInt();
       weatherIcon = weathermodel.getWeatherIcon(condition);
       message = weathermodel.getMessage(temp);
-      city = weatherdata['name'];
+      city = weatherInfo['name'].toString();
     });
   }
 
