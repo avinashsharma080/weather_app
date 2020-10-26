@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:clima/screens/city_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:clima/utilities/constants.dart';
@@ -58,70 +60,82 @@ class _LocationScreenState extends State<LocationScreen> {
         ),
         constraints: BoxConstraints.expand(),
         child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  FlatButton(
-                    onPressed: () async {
-                      var weatherdata = await weathermodel.getlocationWeather();
-                      changeUI(weatherdata);
-                    },
-                    child: Icon(
-                      Icons.near_me,
-                      size: 50.0,
-                    ),
-                  ),
-                  FlatButton(
-                    onPressed: () async {
-                      var returnedCity = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return CityScreen();
-                          },
-                        ),
-                      );
-                      if (returnedCity != null) {
-                        var weatherdata =
-                            await weathermodel.getCityeWeather(returnedCity);
-                        changeUI(weatherdata);
-                      }
-                    },
-                    child: Icon(
-                      Icons.location_city,
-                      size: 50.0,
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 15.0),
-                child: Row(
+          child: BackdropFilter(
+            filter: new ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
+            child: new Container(
+              width: 200.0,
+              height: 200.0,
+              decoration:
+                  new BoxDecoration(color: Colors.white.withOpacity(0.2)),
+              child: new Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    Text(
-                      '$temp°',
-                      style: kTempTextStyle,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        FlatButton(
+                          onPressed: () async {
+                            var weatherdata =
+                                await weathermodel.getlocationWeather();
+                            changeUI(weatherdata);
+                          },
+                          child: Icon(
+                            Icons.near_me,
+                            size: 50.0,
+                          ),
+                        ),
+                        FlatButton(
+                          onPressed: () async {
+                            var returnedCity = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return CityScreen();
+                                },
+                              ),
+                            );
+                            if (returnedCity != null) {
+                              var weatherdata = await weathermodel
+                                  .getCityeWeather(returnedCity);
+                              changeUI(weatherdata);
+                            }
+                          },
+                          child: Icon(
+                            Icons.location_city,
+                            size: 50.0,
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      weatherIcon,
-                      style: kConditionTextStyle,
+                    Padding(
+                      padding: EdgeInsets.only(left: 15.0),
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            '$temp°',
+                            style: kTempTextStyle,
+                          ),
+                          Text(
+                            weatherIcon,
+                            style: kConditionTextStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(right: 15.0),
+                      child: Text(
+                        '$message in $city!',
+                        textAlign: TextAlign.right,
+                        style: kMessageTextStyle,
+                      ),
                     ),
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(right: 15.0),
-                child: Text(
-                  '$message in $city!',
-                  textAlign: TextAlign.right,
-                  style: kMessageTextStyle,
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
